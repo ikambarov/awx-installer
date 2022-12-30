@@ -1,5 +1,13 @@
 #!/bin/bash
 
+if [ "$( cat /etc/centos-release 2> /dev/null | grep CentOS | grep 7.[0-9] )" == "" ]
+then 
+        echo -e "\n\n###########################\n\n"
+        echo "This Script Works on CentOS 7 Only"
+        echo -e "\n\n###########################\n\n"
+        exit;
+fi
+
 read -p "Enter password: " pass
 
 setenforce 0
