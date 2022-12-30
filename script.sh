@@ -25,4 +25,24 @@ sed -i s/"# admin_password=password"/"admin_password=\"${pass}\""/ /awx/installe
 sed -i s/"^secret_key=awxsecret"/"secret_key=\"${pass}\""/ /awx/installer/inventory
 
 cd /awx/installer
+
+try=1
 ansible-playbook -i inventory install.yml 
+result=$?
+
+while [ $try -le 3 ] && [ $result -ne 0 ]
+do
+        echo -e "\n\n###########################\n\n"
+        echo "Failed, Retrying"
+        echo -e "\n\n###########################\n\n"
+        ansible-playbook -i inventory install.yml
+        result=$?
+        try=$(( $try + 1 ))
+done
+
+if [ $result -eq 0 ]
+then
+        echo -e "\n\n###########################\n\n"
+        echo "Success"
+        echo -e "\n\n###########################\n\n"
+fi
